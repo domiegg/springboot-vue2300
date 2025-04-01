@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.XuanshouDao">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.name as name
+        ,a.account as account
+        ,a.password as password
+        ,a.img_photo as imgPhoto
+        ,a.dateofbirth_time as dateofbirthTime
+        ,a.address as address
+        ,a.information as information
+        ,a.grinformation as grinformation
+        ,a.sex_types as sexTypes
+        ,a.zt_types as ztTypes
+        ,a.jlb_types as jlbTypes
+        ,a.role as role
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.XuanshouView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM Xuanshou  a
+        <where>
+            <if test=" params.name != '' and params.name != null and params.name != 'null' ">
+                and a.name like CONCAT('%',#{params.name},'%')
+            </if>
+            <if test=" params.account != '' and params.account != null and params.account != 'null' ">
+                and a.account like CONCAT('%',#{params.account},'%')
+            </if>
+            <if test=" params.password != '' and params.password != null and params.password != 'null' ">
+                and a.password like CONCAT('%',#{params.password},'%')
+            </if>
+            <if test=" params.dateofbirthTimeStart != '' and params.dateofbirthTimeStart != null and params.dateofbirthTimeStart != 'null' ">
+                and a.dateofbirth_time &gt;= {params.dateofbirthTimeStart}
+            </if>
+            <if test=" params.dateofbirthTimeEnd != '' and params.dateofbirthTimeEnd != null and params.dateofbirthTimeEnd != 'null' ">
+                and a.dateofbirth_time &lt;= {params.dateofbirthTimeEnd}
+            </if>
+            <if test=" params.address != '' and params.address != null and params.address != 'null' ">
+                and a.address like CONCAT('%',#{params.address},'%')
+            </if>
+            <if test=" params.information != '' and params.information != null and params.information != 'null' ">
+                and a.information like CONCAT('%',#{params.information},'%')
+            </if>
+            <if test=" params.grinformation != '' and params.grinformation != null and params.grinformation != 'null' ">
+                and a.grinformation like CONCAT('%',#{params.grinformation},'%')
+            </if>
+            <if test=" params.sexTypes != '' and params.sexTypes != null and params.sexTypes != 'null' ">
+                and a.sex_types = #{params.sexTypes}
+            </if>
+            <if test=" params.ztTypes != '' and params.ztTypes != null and params.ztTypes != 'null' ">
+                and a.zt_types = #{params.ztTypes}
+            </if>
+            <if test=" params.jlbTypes != '' and params.jlbTypes != null">
+                and a.jlb_types = #{params.jlbTypes}
+            </if>
+            <if test=" params.yh != '' and params.yh != null and params.qx != '' and params.qx != null">
+                and a.role like CONCAT('%',#{params.qx},'%')
+                and a.id = #{params.yh}
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+</mapper>

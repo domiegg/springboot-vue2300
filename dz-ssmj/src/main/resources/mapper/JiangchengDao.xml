@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.JiangchengDao">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.headline as headline
+        ,a.jlb_types as jlbTypes
+        ,a.xs_types as xsTypes
+        ,a.jc_types as jcTypes
+        ,a.dj_types as djTypes
+        ,a.create_time as createTime
+        ,a.notice_content as noticeContent
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.JiangchengView" >
+        SELECT
+        <include refid="Base_Column_List" />,b.name as xsname,c.name as jlbname
+        FROM Jiangcheng  a left join xuanshou b on a.xs_types = b.id left join julebu c on a.jlb_types = c.id
+        <where>
+            <if test=" params.headline != '' and params.headline != null and params.headline != 'null' ">
+                and a.headline like CONCAT('%',#{params.headline},'%')
+            </if>
+            <if test=" params.jlbTypes != '' and params.jlbTypes != null">
+                and a.jlb_types = #{params.jlbTypes}
+            </if>
+            <if test=" params.xsTypes != '' and params.xsTypes != null and params.xsTypes != 'null' ">
+                and a.xs_types = #{params.xsTypes}
+            </if>
+            <if test=" params.jcTypes != '' and params.jcTypes != null and params.jcTypes != 'null' ">
+                and a.jc_types = #{params.jcTypes}
+            </if>
+            <if test=" params.djTypes != '' and params.djTypes != null and params.djTypes != 'null' ">
+                and a.dj_types = #{params.djTypes}
+            </if>
+            <if test=" params.noticeContent != '' and params.noticeContent != null and params.noticeContent != 'null' ">
+                and a.notice_content like CONCAT('%',#{params.noticeContent},'%')
+            </if>
+            <if test=" params.yh != '' and params.yh != null">
+                and a.xs_types = #{params.yh}
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+</mapper>
